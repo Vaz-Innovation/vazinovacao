@@ -67,6 +67,9 @@ const Index = () => {
             <PantherOrbit />
           </section>
 
+          {/* Roles cinematic marquee */}
+          <RolesMarquee />
+
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
             <img
