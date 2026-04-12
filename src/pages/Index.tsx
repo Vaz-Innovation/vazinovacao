@@ -78,6 +78,9 @@ const Index = () => {
               Vaz Inovação é um{" "}
               <em className="italic text-muted-foreground">coletivo criativo.</em>
             </p>
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground text-center max-w-3xl leading-relaxed font-normal mt-6 italic">
+              Simplificando a tecnologia, ampliando a inteligência humana.
+            </p>
           </section>
 
 
