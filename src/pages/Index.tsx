@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import vazLogo from "@/assets/vaz-logo.png";
 import PantherOrbit from "@/components/PantherOrbit";
+import RolesMarquee from "@/components/RolesMarquee";
 
 const PHRASE = "Fala comigo, eu resolvo.";
 
@@ -65,6 +66,9 @@ const Index = () => {
           <section className="px-6 animate-gentle-fade">
             <PantherOrbit />
           </section>
+
+          {/* Roles cinematic marquee */}
+          <RolesMarquee />
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
