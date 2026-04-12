@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import vazLogo from "@/assets/vaz-logo.png";
 import PantherOrbit from "@/components/PantherOrbit";
+import RolesMarquee from "@/components/RolesMarquee";
 
 const PHRASE = "Fala comigo, eu resolvo.";
 

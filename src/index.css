@@ -93,6 +93,17 @@
   to { transform: rotateX(75deg) rotateZ(360deg); }
 }
 
+/* Marquee animations */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
 @keyframes orbit-spin-reverse {
   from { transform: rotateX(70deg) rotateZ(15deg); }
   to { transform: rotateX(70deg) rotateZ(-345deg); }
