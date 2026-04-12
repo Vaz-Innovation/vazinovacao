@@ -122,7 +122,7 @@ const Index = () => {
 
           {/* WhatsApp Button */}
           <a
-            href="https://wa.me/"
+            href="https://wa.me/556132468810"
             target="_blank"
             rel="noopener noreferrer"
             className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background shadow-lg hover:opacity-80 transition-opacity"
