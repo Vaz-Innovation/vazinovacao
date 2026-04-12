@@ -80,3 +80,20 @@
 .animate-reveal-up {
   animation: reveal-up 1s ease-out forwards;
 }
+
+/* Panther breathing */
+@keyframes panther-breathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.02) translateY(-6px); }
+}
+
+/* Orbit spin */
+@keyframes orbit-spin {
+  from { transform: rotateX(75deg) rotateZ(0deg); }
+  to { transform: rotateX(75deg) rotateZ(360deg); }
+}
+
+@keyframes orbit-spin-reverse {
+  from { transform: rotateX(70deg) rotateZ(15deg); }
+  to { transform: rotateX(70deg) rotateZ(-345deg); }
+}
