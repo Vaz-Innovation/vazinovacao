@@ -78,9 +78,6 @@ const Index = () => {
               Vaz Inovação é um{" "}
               <em className="italic text-muted-foreground">coletivo criativo.</em>
             </p>
-            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground text-center max-w-3xl leading-relaxed font-normal mt-6 italic">
-              Simplificando a tecnologia, ampliando a inteligência humana.
-            </p>
           </section>
 
 
@@ -100,6 +97,9 @@ const Index = () => {
           <footer className="py-16 text-center animate-gentle-fade" style={{ animationDelay: "1.2s", opacity: 0, animationFillMode: "forwards" }}>
             <p className="text-sm text-muted-foreground tracking-widest uppercase">
               Vaz Inovação
+            </p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-4 italic">
+              Simplificando a tecnologia, ampliando a inteligência humana.
             </p>
           </footer>
         </div>
