@@ -101,6 +101,9 @@ const Index = () => {
             <p className="text-sm text-muted-foreground tracking-widest uppercase">
               Vaz Inovação
             </p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-4 italic">
+              Simplificando a tecnologia, ampliando a inteligência humana.
+            </p>
           </footer>
         </div>
       )}
