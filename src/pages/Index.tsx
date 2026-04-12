@@ -80,25 +80,6 @@ const Index = () => {
             </p>
           </section>
 
-          {/* Disciplines */}
-          <section className="flex flex-col items-center justify-center py-16 px-6 animate-gentle-fade" style={{ animationDelay: "0.6s", opacity: 0, animationFillMode: "forwards" }}>
-            <div className="text-center max-w-2xl">
-              {[
-                "estrategistas",
-                "designers",
-                "engenheiros",
-                "desenvolvedores",
-                "consultores",
-                "criativos",
-                "inovadores",
-              ].map((role, i) => (
-                <span key={role} className="text-muted-foreground text-lg sm:text-xl md:text-2xl italic">
-                  {role}
-                  {i < 6 && <span className="mx-2 text-border">·</span>}
-                </span>
-              ))}
-            </div>
-          </section>
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
