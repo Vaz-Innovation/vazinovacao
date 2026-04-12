@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import vazLogo from "@/assets/vaz-logo.png";
-import PantherOrbit from "@/components/PantherOrbit";
-import RolesMarquee from "@/components/RolesMarquee";
+import pantherImg from "@/assets/panther.png";
 
 const PHRASE = "Fala comigo, eu resolvo.";
 
@@ -62,13 +61,44 @@ const Index = () => {
       {/* Content section */}
       {showContent && (
         <div ref={contentRef}>
-          {/* Panther with orbiting disciplines */}
-          <section className="px-6 animate-gentle-fade">
-            <PantherOrbit />
+          {/* Panther */}
+          <section className="flex items-center justify-center py-24 px-6 animate-gentle-fade">
+            <img
+              src={pantherImg}
+              alt="Pantera negra"
+              width={1024}
+              height={768}
+              className="w-full max-w-lg opacity-90"
+            />
           </section>
 
-          {/* Roles cinematic marquee */}
-          <RolesMarquee />
+          {/* About */}
+          <section className="flex flex-col items-center justify-center py-24 px-6 animate-gentle-fade" style={{ animationDelay: "0.3s", opacity: 0, animationFillMode: "forwards" }}>
+            <p className="text-xl sm:text-2xl md:text-3xl text-foreground text-center max-w-3xl leading-relaxed font-normal">
+              Vaz Inovação é um{" "}
+              <em className="italic text-muted-foreground">coletivo criativo.</em>
+            </p>
+          </section>
+
+          {/* Disciplines */}
+          <section className="flex flex-col items-center justify-center py-16 px-6 animate-gentle-fade" style={{ animationDelay: "0.6s", opacity: 0, animationFillMode: "forwards" }}>
+            <div className="text-center max-w-2xl">
+              {[
+                "estrategistas",
+                "designers",
+                "engenheiros",
+                "desenvolvedores",
+                "consultores",
+                "criativos",
+                "inovadores",
+              ].map((role, i) => (
+                <span key={role} className="text-muted-foreground text-lg sm:text-xl md:text-2xl italic">
+                  {role}
+                  {i < 6 && <span className="mx-2 text-border">·</span>}
+                </span>
+              ))}
+            </div>
+          </section>
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
