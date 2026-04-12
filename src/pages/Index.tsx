@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import vazLogo from "@/assets/vaz-logo.png";
 import pantherImg from "@/assets/panther.png";
+import phoneIcon from "@/assets/phone-icon.png";
 
 const PHRASE = "Fala comigo, eu resolvo.";
 
