@@ -232,7 +232,7 @@ const AdminBlog = () => {
               className="border-foreground/20"
             />
             <Button onClick={handleImport} disabled={importing} className="bg-foreground text-background hover:bg-foreground/90 whitespace-nowrap">
-              {importing ? "Importando..." : "Importar"}
+              {importing ? "Processando IA..." : "Importar e Reescrever"}
             </Button>
           </div>
         </div>
