@@ -24,6 +24,7 @@ const AdminBlog = () => {
   const [metaDescription, setMetaDescription] = useState("");
   const [published, setPublished] = useState(false);
   const [importUrl, setImportUrl] = useState("");
+  const [sourceUrl, setSourceUrl] = useState("");
   const [importing, setImporting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -78,6 +79,7 @@ const AdminBlog = () => {
         if (data.summary) setSummary(data.summary);
         if (data.meta_title) setMetaTitle(data.meta_title);
         if (data.meta_description) setMetaDescription(data.meta_description);
+        setSourceUrl(importUrl.trim());
         toast({ title: "Conteúdo importado com sucesso" });
       }
     } catch {
@@ -109,7 +111,7 @@ const AdminBlog = () => {
     setTitle(""); setSlug(""); setSummary(""); setContent("");
     setFeaturedImageUrl(""); setCategoryId(""); setTagsInput("");
     setMetaTitle(""); setMetaDescription(""); setPublished(false);
-    setEditingId(null); setImportUrl("");
+    setEditingId(null); setImportUrl(""); setSourceUrl("");
   };
 
   const handleSave = async () => {
@@ -126,7 +128,7 @@ const AdminBlog = () => {
       featured_image_url: featuredImageUrl || null,
       category_id: categoryId || null, tags,
       meta_title: metaTitle || null, meta_description: metaDescription || null,
-      published, author_id: user?.id,
+      published, author_id: user?.id, source_url: sourceUrl || null,
     };
 
     let error;
@@ -158,6 +160,7 @@ const AdminBlog = () => {
     setMetaTitle(post.meta_title || "");
     setMetaDescription(post.meta_description || "");
     setPublished(post.published);
+    setSourceUrl((post as any).source_url || "");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
