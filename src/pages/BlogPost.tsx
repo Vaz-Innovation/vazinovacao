@@ -206,6 +206,20 @@ const BlogPost = () => {
           />
         )}
 
+        {/* Newsletter CTA */}
+        <div className="mt-16 pt-8 border-t border-foreground/10 text-center">
+          <h3 className="text-xl font-normal mb-2">Gostou? Receba mais conteúdos como este</h3>
+          <p className="text-sm text-muted-foreground mb-4">Insights semanais sobre tecnologia e inovação.</p>
+          <iframe
+            src="https://subscribe-forms.beehiiv.com/822dceb7-ab66-4012-86cd-ce2fed390c34"
+            className="beehiiv-embed mx-auto w-full max-w-md"
+            data-test-id="beehiiv-embed"
+            frameBorder="0"
+            scrolling="no"
+            style={{ height: 100, background: "transparent", border: "none" }}
+          />
+        </div>
+
         {/* Reference link */}
         {(post as any).source_url && (
           <div className="mt-16 pt-8 border-t border-foreground/10">
