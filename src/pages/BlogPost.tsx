@@ -55,6 +55,13 @@ const cleanArticleHtml = (raw: string): string => {
     }
   });
 
+  // Remove all links - replace <a> tags with just their text content
+  const allLinks = doc.body.querySelectorAll("a");
+  allLinks.forEach((a) => {
+    const text = doc.createTextNode(a.textContent || "");
+    a.replaceWith(text);
+  });
+
   // Get the cleaned HTML
   let html = doc.body.innerHTML;
 
