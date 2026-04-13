@@ -8,6 +8,65 @@ type BlogPostData = Tables<"blog_posts"> & {
   blog_categories: { name: string; slug: string } | null;
 };
 
+/**
+ * Cleans raw HTML from scraped articles:
+ * - Strips social share divs, nav, script, style, iframe
+ * - Removes class/style/id/data-* attributes
+ * - Ensures paragraphs have proper spacing
+ */
+const cleanArticleHtml = (raw: string): string => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(raw, "text/html");
+
+  // Remove unwanted elements
+  const removeSelectors = [
+    "script", "style", "iframe", "nav", "footer", "header",
+    ".social", ".share", ".fcbr_social", "[class*=social]",
+    "[class*=share]", "[class*=newsletter]", "[class*=sidebar]",
+    "[class*=related]", "[class*=comment]", "[class*=ad-]",
+    "[class*=advertisement]", "svg",
+  ];
+  removeSelectors.forEach((sel) => {
+    try {
+      doc.querySelectorAll(sel).forEach((el) => el.remove());
+    } catch { /* ignore invalid selectors */ }
+  });
+
+  // Clean attributes from all elements
+  const allElements = doc.body.querySelectorAll("*");
+  allElements.forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+    // Remove all attributes except href/src/alt
+    const attrs = [...el.attributes];
+    attrs.forEach((attr) => {
+      if (!["href", "src", "alt"].includes(attr.name)) {
+        el.removeAttribute(attr.name);
+      }
+    });
+    // Convert divs with only text to paragraphs
+    if (tag === "div" && el.children.length === 0 && el.textContent?.trim()) {
+      const p = doc.createElement("p");
+      p.innerHTML = el.innerHTML;
+      el.replaceWith(p);
+    }
+  });
+
+  // Get the cleaned HTML
+  let html = doc.body.innerHTML;
+
+  // If no <p> tags, wrap text blocks in paragraphs
+  if (!html.includes("<p")) {
+    html = html
+      .split(/\n{2,}/)
+      .map((block) => block.trim())
+      .filter(Boolean)
+      .map((block) => (block.startsWith("<") ? block : `<p>${block}</p>`))
+      .join("\n");
+  }
+
+  return html;
+};
+
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostData | null>(null);
@@ -67,6 +126,8 @@ const BlogPost = () => {
     year: "numeric",
   });
 
+  const cleanedContent = post.content ? cleanArticleHtml(post.content) : "";
+
   return (
     <div className="min-h-screen bg-background text-foreground font-serif">
       {/* Header */}
@@ -80,18 +141,23 @@ const BlogPost = () => {
 
       <article className="max-w-3xl mx-auto px-6 py-16">
         {/* Meta */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-12 space-y-4">
           {post.blog_categories && (
             <span className="text-xs tracking-widest uppercase text-muted-foreground">
               {post.blog_categories.name}
             </span>
           )}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-normal leading-tight">
             {post.title}
           </h1>
+          {post.summary && (
+            <p className="text-lg text-muted-foreground leading-relaxed mt-4">
+              {post.summary}
+            </p>
+          )}
           <p className="text-sm text-muted-foreground/60">{date}</p>
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mt-4">
               {post.tags.map((tag) => (
                 <span key={tag} className="text-xs border border-foreground/10 px-3 py-1 text-muted-foreground">
                   {tag}
@@ -113,10 +179,10 @@ const BlogPost = () => {
         )}
 
         {/* Content */}
-        {post.content && (
+        {cleanedContent && (
           <div
-            className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:font-normal prose-p:text-foreground/80 prose-p:leading-relaxed prose-a:text-foreground prose-a:underline prose-img:rounded-none prose-blockquote:border-foreground/20 prose-blockquote:text-muted-foreground"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+            className="blog-article-content"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cleanedContent) }}
           />
         )}
       </article>
