@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import BlogCard from "@/components/BlogCard";
+import NewsletterCard from "@/components/NewsletterCard";
 import type { Tables } from "@/integrations/supabase/types";
 
 type BlogPost = Tables<"blog_posts"> & {
@@ -113,9 +114,13 @@ const Blog = () => {
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((post) => (
-              <BlogCard key={post.id} post={post} />
+            {filtered.map((post, index) => (
+              <React.Fragment key={post.id}>
+                <BlogCard post={post} />
+                {index === 2 && <NewsletterCard />}
+              </React.Fragment>
             ))}
+            {filtered.length <= 2 && <NewsletterCard />}
           </div>
         )}
       </main>
