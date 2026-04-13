@@ -88,6 +88,13 @@ const Index = () => {
             </p>
           </section>
 
+          {/* Infinite depth line */}
+          <section className="flex items-center justify-center px-6 py-12 animate-gentle-fade" style={{ animationDelay: "0.75s", opacity: 0, animationFillMode: "forwards" }}>
+            <div className="infinite-depth-line max-w-2xl">
+              <div className="line-ray" />
+              <div className="depth-shadow" />
+            </div>
+          </section>
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
