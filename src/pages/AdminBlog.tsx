@@ -69,21 +69,38 @@ const AdminBlog = () => {
     if (!importUrl.trim()) return;
     setImporting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("import-article-url", {
+      // Step 1: Scrape the URL
+      toast({ title: "Importando conteúdo da URL..." });
+      const { data: scraped, error: scrapeError } = await supabase.functions.invoke("import-article-url", {
         body: { url: importUrl },
       });
-      if (error) throw error;
-      if (data) {
-        if (data.title) { setTitle(data.title); setSlug(generateSlug(data.title)); }
-        if (data.content) setContent(data.content);
-        if (data.summary) setSummary(data.summary);
-        if (data.meta_title) setMetaTitle(data.meta_title);
-        if (data.meta_description) setMetaDescription(data.meta_description);
-        setSourceUrl(importUrl.trim());
-        toast({ title: "Conteúdo importado com sucesso" });
-      }
-    } catch {
-      toast({ title: "Erro ao importar", description: "Verifique a URL e tente novamente.", variant: "destructive" });
+      if (scrapeError) throw scrapeError;
+      if (!scraped?.content) throw new Error("Conteúdo não encontrado na URL");
+
+      // Step 2: Rewrite with AI
+      toast({ title: "Reescrevendo artigo com IA...", description: "Isso pode levar alguns segundos." });
+      const { data: rewritten, error: rewriteError } = await supabase.functions.invoke("rewrite-article", {
+        body: {
+          title: scraped.title || "",
+          content: scraped.content,
+          summary: scraped.summary || "",
+        },
+      });
+      if (rewriteError) throw rewriteError;
+
+      // Step 3: Fill form with rewritten content
+      const finalTitle = rewritten?.title || scraped.title || "";
+      setTitle(finalTitle);
+      setSlug(generateSlug(finalTitle));
+      setContent(rewritten?.content || scraped.content);
+      setSummary(rewritten?.summary || scraped.summary || "");
+      setMetaTitle(rewritten?.meta_title || "");
+      setMetaDescription(rewritten?.meta_description || "");
+      setSourceUrl(importUrl.trim());
+      toast({ title: "Artigo importado e reescrito com sucesso!" });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Verifique a URL e tente novamente.";
+      toast({ title: "Erro ao importar", description: msg, variant: "destructive" });
     }
     setImporting(false);
   };
