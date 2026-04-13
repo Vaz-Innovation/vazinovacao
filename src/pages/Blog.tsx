@@ -98,32 +98,6 @@ const Blog = () => {
             </div>
           )}
 
-          {/* Category pills */}
-          <div className="flex items-center gap-2 ml-auto">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                !selectedCategory
-                  ? "bg-foreground text-background"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Todos
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.slug)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === cat.slug
-                    ? "bg-foreground text-background"
-                    : "bg-card border border-border text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
