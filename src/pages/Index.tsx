@@ -81,6 +81,13 @@ const Index = () => {
             </p>
           </section>
 
+          {/* Integrantes */}
+          <section className="flex items-center justify-center py-16 px-6 animate-gentle-fade" style={{ animationDelay: "0.6s", opacity: 0, animationFillMode: "forwards" }}>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-center italic tracking-wide leading-relaxed">
+              estrategistas · designers · engenheiros · desenvolvedores · consultores · criativos · inovadores
+            </p>
+          </section>
+
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
