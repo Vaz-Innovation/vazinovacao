@@ -1,0 +1,1 @@
+UPDATE public.blog_posts SET source_url = 'https://fastcompanybrasil.com/tech/a-conta-da-corrida-pela-ia-esta-chegando-aos-empregos/', slug = 'a-conta-da-corrida-pela-ia-esta-chegando-aos-empregos' WHERE id = '13b2156e-3200-4668-8914-8523893d9790';

@@ -47,6 +47,7 @@ export type Database = {
           meta_title: string | null
           published: boolean
           slug: string
+          source_url: string | null
           summary: string | null
           tags: string[] | null
           title: string
@@ -63,6 +64,7 @@ export type Database = {
           meta_title?: string | null
           published?: boolean
           slug: string
+          source_url?: string | null
           summary?: string | null
           tags?: string[] | null
           title: string
@@ -79,6 +81,7 @@ export type Database = {
           meta_title?: string | null
           published?: boolean
           slug?: string
+          source_url?: string | null
           summary?: string | null
           tags?: string[] | null
           title?: string
