@@ -25,6 +25,10 @@ const cleanArticleHtml = (raw: string): string => {
     "[class*=share]", "[class*=newsletter]", "[class*=sidebar]",
     "[class*=related]", "[class*=comment]", "[class*=ad-]",
     "[class*=advertisement]", "svg",
+    "[class*=author]", "[class*=byline]", "[class*=credit]",
+    "[class*=source]", "[class*=origin]", "[class*=logo]",
+    "[class*=brand]", "[class*=masthead]", "[class*=site-name]",
+    "[class*=publisher]", "[class*=copyright]",
   ];
   removeSelectors.forEach((sel) => {
     try {
@@ -54,6 +58,12 @@ const cleanArticleHtml = (raw: string): string => {
   // Get the cleaned HTML
   let html = doc.body.innerHTML;
 
+  // Remove references to original source names (common patterns)
+  html = html.replace(/Fast\s*Company\s*(Brasil)?/gi, "");
+  html = html.replace(/Publicado\s*(originalmente\s*)?(em|por)\s*[^<.]*/gi, "");
+  html = html.replace(/Fonte:\s*[^<.]*/gi, "");
+  html = html.replace(/Via:\s*[^<.]*/gi, "");
+
   // If no <p> tags, wrap text blocks in paragraphs
   if (!html.includes("<p")) {
     html = html
@@ -63,6 +73,9 @@ const cleanArticleHtml = (raw: string): string => {
       .map((block) => (block.startsWith("<") ? block : `<p>${block}</p>`))
       .join("\n");
   }
+
+  // Remove empty paragraphs
+  html = html.replace(/<p>\s*<\/p>/g, "");
 
   return html;
 };
@@ -184,6 +197,23 @@ const BlogPost = () => {
             className="blog-article-content"
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cleanedContent) }}
           />
+        )}
+
+        {/* Reference link */}
+        {(post as any).source_url && (
+          <div className="mt-16 pt-8 border-t border-foreground/10">
+            <p className="text-sm text-muted-foreground">
+              Artigo de referência:{" "}
+              <a
+                href={(post as any).source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-foreground transition-colors"
+              >
+                {(post as any).source_url}
+              </a>
+            </p>
+          </div>
         )}
       </article>
     </div>
