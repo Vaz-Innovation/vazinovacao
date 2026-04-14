@@ -155,6 +155,11 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
                   <BlogPostCard post={post.node} />
                 </div>
               ))}
+              {!hasNextPage && (
+                <div>
+                  <NewsletterSubscribeCard compact />
+                </div>
+              )}
             </div>
           )}
 
@@ -172,7 +177,11 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
             </nav>
           )}
 
-          <NewsletterSubscribeCard />
+          {hasNextPage && (
+            <div className="mt-12">
+              <NewsletterSubscribeCard compact />
+            </div>
+          )}
         </main>
       </div>
     </>
