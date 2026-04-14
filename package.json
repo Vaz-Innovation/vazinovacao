@@ -9,7 +9,7 @@
     "gen:watch": "graphql-codegen -r dotenv/config --config codegen.ts --watch",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
-    "build": "pnpm run gen && pnpm run typecheck && pnpm run lint && next build",
+    "build": "pnpm run typecheck && pnpm run lint && next build",
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest"
