@@ -1,5 +1,6 @@
+import Head from "next/head";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import vazLogo from "@/assets/vaz-logo.png";
 import pantherImg from "@/assets/panther.png";
 import phoneIcon from "@/assets/phone-icon.png";
@@ -40,7 +41,16 @@ const Index = () => {
   }, [typingDone]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-serif">
+    <>
+      <Head>
+        <title>Vaz Inovacao</title>
+        <meta
+          name="description"
+          content="Simplificando a tecnologia e ampliando a inteligencia humana."
+        />
+      </Head>
+
+      <div className="min-h-screen bg-background text-foreground font-serif">
       {/* Hero - Full viewport typewriter */}
       <section className="flex flex-col items-center justify-center min-h-screen px-6 relative">
         <div className="flex items-center justify-center">
@@ -66,7 +76,7 @@ const Index = () => {
           {/* Panther */}
           <section className="flex items-center justify-center py-24 px-6 animate-gentle-fade">
             <img
-              src={pantherImg}
+              src={pantherImg.src}
               alt="Pantera negra"
               width={1024}
               height={768}
@@ -80,6 +90,21 @@ const Index = () => {
               Vaz Inovação é um{" "}
               <em className="italic text-muted-foreground">coletivo criativo.</em>
             </p>
+
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/blog"
+                className="inline-flex items-center justify-center rounded-full border border-foreground bg-foreground px-6 py-3 text-sm uppercase tracking-wider text-background transition-opacity hover:opacity-85"
+              >
+                Explorar o blog
+              </Link>
+              <Link
+                href="/blog"
+                className="inline-flex items-center justify-center rounded-full border border-foreground/30 px-6 py-3 text-sm uppercase tracking-wider text-foreground transition-colors hover:border-foreground"
+              >
+                Ver artigos recentes
+              </Link>
+            </div>
           </section>
 
           {/* Integrantes */}
@@ -100,7 +125,7 @@ const Index = () => {
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
             <img
-              src={vazLogo}
+              src={vazLogo.src}
               alt="Vaz Inovação"
               loading="lazy"
               width={400}
@@ -130,7 +155,7 @@ const Index = () => {
               <a href="https://medium.com/@vaz_por_todos" target="_blank" rel="noopener noreferrer" aria-label="Medium" className="text-muted-foreground hover:text-foreground transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
               </a>
-              <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm tracking-widest uppercase font-normal">
+              <Link href="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm tracking-widest uppercase font-normal">
                 Blog
               </Link>
             </div>
@@ -149,11 +174,12 @@ const Index = () => {
             className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background shadow-lg hover:opacity-80 transition-opacity"
             aria-label="Fale conosco no WhatsApp"
           >
-            <img src={phoneIcon} alt="Telefone" width={28} height={28} className="invert" />
+            <img src={phoneIcon.src} alt="Telefone" width={28} height={28} className="invert" />
           </a>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 

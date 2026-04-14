@@ -1,0 +1,133 @@
+schema {
+  query: RootQuery
+  mutation: RootMutation
+}
+
+scalar DateTime
+
+enum OrderEnum {
+  ASC
+  DESC
+}
+
+enum PostObjectsConnectionOrderbyEnum {
+  DATE
+}
+
+enum LanguageCodeFilterEnum {
+  PT
+  EN
+}
+
+enum PostIdType {
+  SLUG
+}
+
+interface TermNode {
+  id: ID!
+  name: String
+  slug: String
+}
+
+type Category implements TermNode {
+  id: ID!
+  name: String
+  slug: String
+}
+
+type Tag implements TermNode {
+  id: ID!
+  name: String
+  slug: String
+}
+
+type TermNodeConnection {
+  nodes: [TermNode]
+}
+
+type MediaItem {
+  sourceUrl: String
+  altText: String
+}
+
+type MediaItemConnection {
+  node: MediaItem
+}
+
+type Post {
+  id: ID!
+  title: String
+  slug: String
+  date: DateTime
+  modified: DateTime
+  excerpt: String
+  content: String
+  featuredImage: MediaItemConnection
+  categories: TermNodeConnection
+  tags: TermNodeConnection
+}
+
+type OffsetPagination {
+  total: Int
+}
+
+type PageInfo {
+  offsetPagination: OffsetPagination
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  endCursor: String
+  startCursor: String
+}
+
+type PostConnection {
+  nodes: [Post]
+  pageInfo: PageInfo
+}
+
+type CategoryConnection {
+  nodes: [Category]
+}
+
+input PostObjectsConnectionOrderbyInput {
+  field: PostObjectsConnectionOrderbyEnum
+  order: OrderEnum
+}
+
+input OffsetPaginationInput {
+  offset: Int
+  size: Int
+}
+
+input PostObjectsConnectionWhereArgs {
+  orderby: PostObjectsConnectionOrderbyInput
+  language: LanguageCodeFilterEnum
+  offsetPagination: OffsetPaginationInput
+}
+
+input CategoryObjectsConnectionWhereArgs {
+  language: LanguageCodeFilterEnum
+}
+
+type RootQuery {
+  categories(first: Int, where: CategoryObjectsConnectionWhereArgs): CategoryConnection
+  posts(first: Int, after: String, where: PostObjectsConnectionWhereArgs): PostConnection
+  post(id: ID!, idType: PostIdType!): Post
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+type User {
+  id: ID
+}
+
+type CreateUserPayload {
+  user: User
+}
+
+type RootMutation {
+  createUser(input: CreateUserInput!): CreateUserPayload
+}
