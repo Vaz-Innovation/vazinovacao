@@ -153,10 +153,13 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
               {filteredPosts.map((post, index) => (
                 <div key={post.data.id || `${post.data.slug || "post"}-${index}`}>
                   <BlogPostCard post={post.node} />
-                  {index === 2 && <NewsletterSubscribeCard compact />}
                 </div>
               ))}
-              {filteredPosts.length <= 2 && <NewsletterSubscribeCard compact />}
+              {!hasNextPage && (
+                <div>
+                  <NewsletterSubscribeCard compact />
+                </div>
+              )}
             </div>
           )}
 
@@ -172,6 +175,12 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
                 2
               </Link>
             </nav>
+          )}
+
+          {hasNextPage && (
+            <div className="mt-12">
+              <NewsletterSubscribeCard compact />
+            </div>
           )}
         </main>
       </div>
