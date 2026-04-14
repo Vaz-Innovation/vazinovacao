@@ -153,10 +153,8 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
               {filteredPosts.map((post, index) => (
                 <div key={post.data.id || `${post.data.slug || "post"}-${index}`}>
                   <BlogPostCard post={post.node} />
-                  {index === 2 && <NewsletterSubscribeCard compact />}
                 </div>
               ))}
-              {filteredPosts.length <= 2 && <NewsletterSubscribeCard compact />}
             </div>
           )}
 
@@ -173,6 +171,8 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
               </Link>
             </nav>
           )}
+
+          <NewsletterSubscribeCard />
         </main>
       </div>
     </>
