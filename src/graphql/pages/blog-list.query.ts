@@ -2,9 +2,9 @@ import { graphql } from "@/graphql/__gen__";
 
 export const BlogListOnQueryFragment = graphql(/* GraphQL */ `
   fragment BlogList_onQuery on RootQuery {
-    categories(first: 100) {
+    categories(first: 100, where: { language: $language }) {
       nodes {
-        ...TaxonomyChip_TermFragment
+        ...BlogCategoryMenu_CategoryFragment
       }
     }
     blogPosts: posts(

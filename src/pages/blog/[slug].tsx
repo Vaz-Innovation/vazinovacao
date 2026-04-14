@@ -10,6 +10,7 @@ import {
   BlogPostHeader,
   BlogPostHeaderFragment,
 } from "@/features/blog/components/blog-post-header";
+import { BlogAuthorCard } from "@/features/blog/components/organisms/blog-author-card";
 import { NewsletterSubscribeCard } from "@/features/blog/components/newsletter-subscribe-card";
 import { stripHtml } from "@/features/blog/utils/strip-html";
 import { useFragment as readFragment } from "@/graphql/__gen__";
@@ -58,6 +59,7 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
   }
 
   const postHeaderData = readFragment(BlogPostHeaderFragment, post);
+  const authorNode = post.author?.node;
 
   const relatedPosts = (queryData?.relatedPosts?.nodes || [])
     .filter(Boolean)
@@ -93,6 +95,12 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
 
         <article className="max-w-3xl mx-auto px-6 py-16">
           <BlogPostHeader post={post} />
+
+          {authorNode && (
+            <div className="mb-10">
+              <BlogAuthorCard author={authorNode} />
+            </div>
+          )}
 
           {post.content && (
             <div

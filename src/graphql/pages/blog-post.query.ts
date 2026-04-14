@@ -6,6 +6,11 @@ export const BlogPostOnQueryFragment = graphql(/* GraphQL */ `
       ...BlogPostHeader_PostFragment
       content
       modified
+      author {
+        node {
+          ...BlogAuthorCard_AuthorFragment
+        }
+      }
       categories {
         nodes {
           ...TaxonomyChip_TermFragment

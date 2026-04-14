@@ -1,4 +1,5 @@
 import { Calendar, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { type FragmentType, graphql, useFragment } from "@/graphql/__gen__";
@@ -19,6 +20,11 @@ export const BlogPostCardFragment = graphql(/* GraphQL */ `
       }
     }
     tags {
+      nodes {
+        ...TaxonomyChip_TermFragment
+      }
+    }
+    categories {
       nodes {
         ...TaxonomyChip_TermFragment
       }
@@ -44,12 +50,13 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
     <Link href={`/blog/${postData.slug}`} className="group block">
       <article className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
         {postData.featuredImage?.node?.sourceUrl && (
-          <div className="aspect-[16/9] overflow-hidden">
-            <img
+          <div className="relative aspect-[16/9] overflow-hidden">
+            <Image
               src={postData.featuredImage.node.sourceUrl}
               alt={postData.featuredImage.node.altText || postData.title || "Imagem destacada"}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
             />
           </div>
         )}

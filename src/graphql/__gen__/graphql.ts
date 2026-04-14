@@ -9821,6 +9821,9 @@ export type WritingSettings = {
 export type BlogPostCard_PostFragmentFragment = { __typename?: 'Post', id: string, title?: string | null, slug?: string | null, date?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null } } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<(
       { __typename?: 'Tag' }
       & { ' $fragmentRefs'?: { 'TaxonomyChip_TermFragment_Tag_Fragment': TaxonomyChip_TermFragment_Tag_Fragment } }
+    )> } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<(
+      { __typename?: 'Category' }
+      & { ' $fragmentRefs'?: { 'TaxonomyChip_TermFragment_Category_Fragment': TaxonomyChip_TermFragment_Category_Fragment } }
     )> } | null } & { ' $fragmentName'?: 'BlogPostCard_PostFragmentFragment' };
 
 export type BlogPostHeader_PostFragmentFragment = { __typename?: 'Post', id: string, slug?: string | null, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null } } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<(
@@ -9831,6 +9834,10 @@ export type BlogPostHeader_PostFragmentFragment = { __typename?: 'Post', id: str
       & { ' $fragmentRefs'?: { 'TaxonomyChip_TermFragment_Tag_Fragment': TaxonomyChip_TermFragment_Tag_Fragment } }
     )> } | null } & { ' $fragmentName'?: 'BlogPostHeader_PostFragmentFragment' };
 
+export type BlogCategoryMenu_CategoryFragmentFragment = { __typename?: 'Category', id: string, slug?: string | null, name?: string | null, count?: number | null } & { ' $fragmentName'?: 'BlogCategoryMenu_CategoryFragmentFragment' };
+
+export type BlogAuthorCard_AuthorFragmentFragment = { __typename?: 'User', id: string, slug?: string | null, name?: string | null, firstName?: string | null, lastName?: string | null, description?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } & { ' $fragmentName'?: 'BlogAuthorCard_AuthorFragmentFragment' };
+
 type TaxonomyChip_TermFragment_Category_Fragment = { __typename?: 'Category', id: string, name?: string | null, slug?: string | null } & { ' $fragmentName'?: 'TaxonomyChip_TermFragment_Category_Fragment' };
 
 type TaxonomyChip_TermFragment_PostFormat_Fragment = { __typename?: 'PostFormat', id: string, name?: string | null, slug?: string | null } & { ' $fragmentName'?: 'TaxonomyChip_TermFragment_PostFormat_Fragment' };
@@ -9839,9 +9846,38 @@ type TaxonomyChip_TermFragment_Tag_Fragment = { __typename?: 'Tag', id: string, 
 
 export type TaxonomyChip_TermFragmentFragment = TaxonomyChip_TermFragment_Category_Fragment | TaxonomyChip_TermFragment_PostFormat_Fragment | TaxonomyChip_TermFragment_Tag_Fragment;
 
+export type BlogAuthorPage_OnQueryFragment = { __typename?: 'RootQuery', blogAuthor?: { __typename?: 'RootQueryToUserConnection', nodes: Array<(
+      { __typename?: 'User' }
+      & { ' $fragmentRefs'?: { 'BlogAuthorCard_AuthorFragmentFragment': BlogAuthorCard_AuthorFragmentFragment } }
+    )> } | null, authorPosts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<(
+      { __typename?: 'Post' }
+      & { ' $fragmentRefs'?: { 'BlogPostCard_PostFragmentFragment': BlogPostCard_PostFragmentFragment } }
+    )>, pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null } } | null } & { ' $fragmentName'?: 'BlogAuthorPage_OnQueryFragment' };
+
+export type BlogAuthorPageQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+  language?: InputMaybe<LanguageCodeFilterEnum>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type BlogAuthorPageQuery = (
+  { __typename?: 'RootQuery' }
+  & { ' $fragmentRefs'?: { 'BlogAuthorPage_OnQueryFragment': BlogAuthorPage_OnQueryFragment } }
+);
+
+export type BlogAuthorSlugsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type BlogAuthorSlugsQuery = { __typename?: 'RootQuery', users?: { __typename?: 'RootQueryToUserConnection', nodes: Array<{ __typename?: 'User', slug?: string | null }>, pageInfo: { __typename?: 'RootQueryToUserConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
+
 export type BlogList_OnQueryFragment = { __typename?: 'RootQuery', categories?: { __typename?: 'RootQueryToCategoryConnection', nodes: Array<(
       { __typename?: 'Category' }
-      & { ' $fragmentRefs'?: { 'TaxonomyChip_TermFragment_Category_Fragment': TaxonomyChip_TermFragment_Category_Fragment } }
+      & { ' $fragmentRefs'?: { 'BlogCategoryMenu_CategoryFragmentFragment': BlogCategoryMenu_CategoryFragmentFragment } }
     )> } | null, blogPosts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<(
       { __typename?: 'Post' }
       & { ' $fragmentRefs'?: { 'BlogPostCard_PostFragmentFragment': BlogPostCard_PostFragmentFragment } }
@@ -9869,7 +9905,10 @@ export type BlogListPageInfoQueryVariables = Exact<{
 export type BlogListPageInfoQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
 
 export type BlogPost_OnQueryFragment = { __typename?: 'RootQuery', post?: (
-    { __typename?: 'Post', content?: string | null, modified?: string | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<(
+    { __typename?: 'Post', content?: string | null, modified?: string | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node: (
+        { __typename?: 'User' }
+        & { ' $fragmentRefs'?: { 'BlogAuthorCard_AuthorFragmentFragment': BlogAuthorCard_AuthorFragmentFragment } }
+      ) } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<(
         { __typename?: 'Category' }
         & { ' $fragmentRefs'?: { 'TaxonomyChip_TermFragment_Category_Fragment': TaxonomyChip_TermFragment_Category_Fragment } }
       )> } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<(
@@ -9920,6 +9959,19 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
+export const BlogAuthorCard_AuthorFragmentFragmentDoc = new TypedDocumentString(`
+    fragment BlogAuthorCard_AuthorFragment on User {
+  id
+  slug
+  name
+  firstName
+  lastName
+  description
+  avatar(size: 160) {
+    url
+  }
+}
+    `, {"fragmentName":"BlogAuthorCard_AuthorFragment"}) as unknown as TypedDocumentString<BlogAuthorCard_AuthorFragmentFragment, unknown>;
 export const TaxonomyChip_TermFragmentFragmentDoc = new TypedDocumentString(`
     fragment TaxonomyChip_TermFragment on TermNode {
   id
@@ -9945,17 +9997,90 @@ export const BlogPostCard_PostFragmentFragmentDoc = new TypedDocumentString(`
       ...TaxonomyChip_TermFragment
     }
   }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
 }
     fragment TaxonomyChip_TermFragment on TermNode {
   id
   name
   slug
 }`, {"fragmentName":"BlogPostCard_PostFragment"}) as unknown as TypedDocumentString<BlogPostCard_PostFragmentFragment, unknown>;
-export const BlogList_OnQueryFragmentDoc = new TypedDocumentString(`
-    fragment BlogList_onQuery on RootQuery {
-  categories(first: 100) {
+export const BlogAuthorPage_OnQueryFragmentDoc = new TypedDocumentString(`
+    fragment BlogAuthorPage_onQuery on RootQuery {
+  blogAuthor: users(first: 1, where: {nicename: $slug}) {
+    nodes {
+      ...BlogAuthorCard_AuthorFragment
+    }
+  }
+  authorPosts: posts(
+    first: $first
+    after: $after
+    where: {orderby: {field: DATE, order: DESC}, authorName: $slug, language: $language}
+  ) {
+    nodes {
+      ...BlogPostCard_PostFragment
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    fragment BlogPostCard_PostFragment on Post {
+  id
+  title
+  slug
+  date
+  excerpt
+  featuredImage {
+    node {
+      sourceUrl
+      altText
+    }
+  }
+  tags {
     nodes {
       ...TaxonomyChip_TermFragment
+    }
+  }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
+}
+fragment BlogAuthorCard_AuthorFragment on User {
+  id
+  slug
+  name
+  firstName
+  lastName
+  description
+  avatar(size: 160) {
+    url
+  }
+}
+fragment TaxonomyChip_TermFragment on TermNode {
+  id
+  name
+  slug
+}`, {"fragmentName":"BlogAuthorPage_onQuery"}) as unknown as TypedDocumentString<BlogAuthorPage_OnQueryFragment, unknown>;
+export const BlogCategoryMenu_CategoryFragmentFragmentDoc = new TypedDocumentString(`
+    fragment BlogCategoryMenu_CategoryFragment on Category {
+  id
+  slug
+  name
+  count
+}
+    `, {"fragmentName":"BlogCategoryMenu_CategoryFragment"}) as unknown as TypedDocumentString<BlogCategoryMenu_CategoryFragmentFragment, unknown>;
+export const BlogList_OnQueryFragmentDoc = new TypedDocumentString(`
+    fragment BlogList_onQuery on RootQuery {
+  categories(first: 100, where: {language: $language}) {
+    nodes {
+      ...BlogCategoryMenu_CategoryFragment
     }
   }
   blogPosts: posts(
@@ -9989,6 +10114,17 @@ export const BlogList_OnQueryFragmentDoc = new TypedDocumentString(`
       ...TaxonomyChip_TermFragment
     }
   }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
+}
+fragment BlogCategoryMenu_CategoryFragment on Category {
+  id
+  slug
+  name
+  count
 }
 fragment TaxonomyChip_TermFragment on TermNode {
   id
@@ -10030,6 +10166,11 @@ export const BlogPost_OnQueryFragmentDoc = new TypedDocumentString(`
     ...BlogPostHeader_PostFragment
     content
     modified
+    author {
+      node {
+        ...BlogAuthorCard_AuthorFragment
+      }
+    }
     categories {
       nodes {
         ...TaxonomyChip_TermFragment
@@ -10067,6 +10208,11 @@ export const BlogPost_OnQueryFragmentDoc = new TypedDocumentString(`
       ...TaxonomyChip_TermFragment
     }
   }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
 }
 fragment BlogPostHeader_PostFragment on Post {
   id
@@ -10091,11 +10237,98 @@ fragment BlogPostHeader_PostFragment on Post {
     }
   }
 }
+fragment BlogAuthorCard_AuthorFragment on User {
+  id
+  slug
+  name
+  firstName
+  lastName
+  description
+  avatar(size: 160) {
+    url
+  }
+}
 fragment TaxonomyChip_TermFragment on TermNode {
   id
   name
   slug
 }`, {"fragmentName":"BlogPost_onQuery"}) as unknown as TypedDocumentString<BlogPost_OnQueryFragment, unknown>;
+export const BlogAuthorPageDocument = new TypedDocumentString(`
+    query BlogAuthorPage($slug: String!, $language: LanguageCodeFilterEnum = PT, $first: Int = 11, $after: String) {
+  ...BlogAuthorPage_onQuery
+}
+    fragment BlogPostCard_PostFragment on Post {
+  id
+  title
+  slug
+  date
+  excerpt
+  featuredImage {
+    node {
+      sourceUrl
+      altText
+    }
+  }
+  tags {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
+}
+fragment BlogAuthorCard_AuthorFragment on User {
+  id
+  slug
+  name
+  firstName
+  lastName
+  description
+  avatar(size: 160) {
+    url
+  }
+}
+fragment TaxonomyChip_TermFragment on TermNode {
+  id
+  name
+  slug
+}
+fragment BlogAuthorPage_onQuery on RootQuery {
+  blogAuthor: users(first: 1, where: {nicename: $slug}) {
+    nodes {
+      ...BlogAuthorCard_AuthorFragment
+    }
+  }
+  authorPosts: posts(
+    first: $first
+    after: $after
+    where: {orderby: {field: DATE, order: DESC}, authorName: $slug, language: $language}
+  ) {
+    nodes {
+      ...BlogPostCard_PostFragment
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}`) as unknown as TypedDocumentString<BlogAuthorPageQuery, BlogAuthorPageQueryVariables>;
+export const BlogAuthorSlugsDocument = new TypedDocumentString(`
+    query BlogAuthorSlugs($first: Int = 100, $after: String) {
+  users(first: $first, after: $after, where: {hasPublishedPosts: [POST]}) {
+    nodes {
+      slug
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<BlogAuthorSlugsQuery, BlogAuthorSlugsQueryVariables>;
 export const BlogListPageDocument = new TypedDocumentString(`
     query BlogListPage($language: LanguageCodeFilterEnum = PT, $first: Int = 11, $after: String) {
   ...BlogList_onQuery
@@ -10117,6 +10350,17 @@ export const BlogListPageDocument = new TypedDocumentString(`
       ...TaxonomyChip_TermFragment
     }
   }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
+}
+fragment BlogCategoryMenu_CategoryFragment on Category {
+  id
+  slug
+  name
+  count
 }
 fragment TaxonomyChip_TermFragment on TermNode {
   id
@@ -10124,9 +10368,9 @@ fragment TaxonomyChip_TermFragment on TermNode {
   slug
 }
 fragment BlogList_onQuery on RootQuery {
-  categories(first: 100) {
+  categories(first: 100, where: {language: $language}) {
     nodes {
-      ...TaxonomyChip_TermFragment
+      ...BlogCategoryMenu_CategoryFragment
     }
   }
   blogPosts: posts(
@@ -10178,6 +10422,11 @@ export const BlogPostPageDocument = new TypedDocumentString(`
       ...TaxonomyChip_TermFragment
     }
   }
+  categories {
+    nodes {
+      ...TaxonomyChip_TermFragment
+    }
+  }
 }
 fragment BlogPostHeader_PostFragment on Post {
   id
@@ -10202,6 +10451,17 @@ fragment BlogPostHeader_PostFragment on Post {
     }
   }
 }
+fragment BlogAuthorCard_AuthorFragment on User {
+  id
+  slug
+  name
+  firstName
+  lastName
+  description
+  avatar(size: 160) {
+    url
+  }
+}
 fragment TaxonomyChip_TermFragment on TermNode {
   id
   name
@@ -10212,6 +10472,11 @@ fragment BlogPost_onQuery on RootQuery {
     ...BlogPostHeader_PostFragment
     content
     modified
+    author {
+      node {
+        ...BlogAuthorCard_AuthorFragment
+      }
+    }
     categories {
       nodes {
         ...TaxonomyChip_TermFragment

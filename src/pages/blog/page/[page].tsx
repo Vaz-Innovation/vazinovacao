@@ -73,6 +73,7 @@ export default function BlogPaginatedPage({
 }: BlogPaginatedPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState("");
 
   const { data, isLoading } = useQuery(
     gqlQueryOptions(BlogListPageQuery, { input: queryInput }),
@@ -107,6 +108,14 @@ export default function BlogPaginatedPage({
     [posts],
   );
 
+  const categories = useMemo(
+    () =>
+      (queryData?.categories?.nodes || []).filter(
+        (category): category is NonNullable<typeof category> => Boolean(category),
+      ),
+    [queryData?.categories?.nodes],
+  );
+
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
       const postTitle = post.data.title?.toLowerCase() || "";
@@ -126,9 +135,18 @@ export default function BlogPaginatedPage({
           })
         : true;
 
-      return matchesSearch && matchesTag;
+      const matchesCategory = selectedCategorySlug
+        ? (post.data.categories?.nodes || []).some((category) => {
+            if (!category) {
+              return false;
+            }
+            return readFragment(TaxonomyChipFragment, category).slug === selectedCategorySlug;
+          })
+        : true;
+
+      return matchesSearch && matchesTag && matchesCategory;
     });
-  }, [posts, searchQuery, selectedTag]);
+  }, [posts, searchQuery, selectedTag, selectedCategorySlug]);
 
   const hasNextPage = Boolean(queryData?.blogPosts?.pageInfo?.hasNextPage);
 
@@ -161,6 +179,9 @@ export default function BlogPaginatedPage({
             onSearchQueryChange={setSearchQuery}
             selectedTag={selectedTag}
             onSelectedTagChange={setSelectedTag}
+            selectedCategorySlug={selectedCategorySlug}
+            onSelectedCategorySlugChange={setSelectedCategorySlug}
+            categories={categories}
             tags={tags}
           />
         </section>

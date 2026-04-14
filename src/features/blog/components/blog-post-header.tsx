@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { type FragmentType, graphql, useFragment } from "@/graphql/__gen__";
 import { TaxonomyChip } from "@/features/blog/components/taxonomy-chip";
 import { formatPostDate } from "@/features/blog/utils/format-post-date";
@@ -71,11 +73,15 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
 
       {postData.featuredImage?.node?.sourceUrl && (
         <div className="pt-4">
-          <img
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <Image
             src={postData.featuredImage.node.sourceUrl}
             alt={postData.featuredImage.node.altText || postData.title || "Imagem destacada"}
-            className="w-full"
-          />
+              fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover"
+            />
+          </div>
         </div>
       )}
     </div>

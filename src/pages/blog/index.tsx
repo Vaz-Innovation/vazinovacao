@@ -28,6 +28,7 @@ interface BlogPageProps {
 export default function BlogPage({ queryInput }: BlogPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState("");
 
   const { data, isLoading } = useQuery(
     gqlQueryOptions(BlogListPageQuery, { input: queryInput }),
@@ -40,6 +41,14 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
   );
 
   const hasNextPage = Boolean(queryData?.blogPosts?.pageInfo?.hasNextPage);
+
+  const categories = useMemo(
+    () =>
+      (queryData?.categories?.nodes || []).filter(
+        (category): category is NonNullable<typeof category> => Boolean(category),
+      ),
+    [queryData?.categories?.nodes],
+  );
 
   const posts = useMemo(
     () =>
@@ -83,9 +92,18 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
           })
         : true;
 
-      return matchesSearch && matchesTag;
+      const matchesCategory = selectedCategorySlug
+        ? (post.data.categories?.nodes || []).some((category) => {
+            if (!category) {
+              return false;
+            }
+            return readFragment(TaxonomyChipFragment, category).slug === selectedCategorySlug;
+          })
+        : true;
+
+      return matchesSearch && matchesTag && matchesCategory;
     });
-  }, [posts, searchQuery, selectedTag]);
+  }, [posts, searchQuery, selectedTag, selectedCategorySlug]);
 
   return (
     <>
@@ -116,6 +134,9 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
             onSearchQueryChange={setSearchQuery}
             selectedTag={selectedTag}
             onSelectedTagChange={setSelectedTag}
+            selectedCategorySlug={selectedCategorySlug}
+            onSelectedCategorySlugChange={setSelectedCategorySlug}
+            categories={categories}
             tags={tags}
           />
         </section>

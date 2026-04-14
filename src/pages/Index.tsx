@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import vazLogo from "@/assets/vaz-logo.png";
@@ -75,7 +76,7 @@ const Index = () => {
         <div ref={contentRef}>
           {/* Panther */}
           <section className="flex items-center justify-center py-24 px-6 animate-gentle-fade">
-            <img
+            <Image
               src={pantherImg.src}
               alt="Pantera negra"
               width={1024}
@@ -124,10 +125,9 @@ const Index = () => {
 
           {/* Logo */}
           <section className="flex items-center justify-center py-32 px-6 animate-gentle-fade" style={{ animationDelay: "0.9s", opacity: 0, animationFillMode: "forwards" }}>
-            <img
+            <Image
               src={vazLogo.src}
               alt="Vaz Inovação"
-              loading="lazy"
               width={400}
               height={400}
               className="w-32 sm:w-40 md:w-48"
@@ -174,7 +174,7 @@ const Index = () => {
             className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background shadow-lg hover:opacity-80 transition-opacity"
             aria-label="Fale conosco no WhatsApp"
           >
-            <img src={phoneIcon.src} alt="Telefone" width={28} height={28} className="invert" />
+            <Image src={phoneIcon.src} alt="Telefone" width={28} height={28} className="invert" />
           </a>
         </div>
       )}
