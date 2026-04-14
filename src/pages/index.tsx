@@ -108,6 +108,71 @@ const Index = () => {
             </div>
           </section>
 
+          {/* Founders */}
+          <section className="py-24 px-6 animate-gentle-fade" style={{ animationDelay: "0.45s", opacity: 0, animationFillMode: "forwards" }}>
+            <p className="text-center text-sm uppercase tracking-[0.3em] text-muted-foreground mb-16">
+              Fundadores
+            </p>
+            
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-4">
+                {/* Manuel */}
+                <div className="group relative">
+                  <div className="relative bg-background border border-foreground/10 p-3 transition-transform duration-500 hover:rotate-[-2deg] hover:scale-105">
+                    <div className="relative w-64 h-80 overflow-hidden">
+                      <Image
+                        src="/founders/manuel-antunes.png"
+                        alt="Manuel Antunes"
+                        fill
+                        className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    </div>
+                    <div className="pt-4 pb-2 px-1">
+                      <p className="text-lg font-normal text-foreground">Manuel Antunes</p>
+                      <p className="text-sm text-muted-foreground italic">Founder & CTO</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Isa - Center, elevated */}
+                <div className="group relative lg:-mt-8 z-10">
+                  <div className="relative bg-background border border-foreground/10 p-3 transition-transform duration-500 hover:rotate-[1deg] hover:scale-105 shadow-xl">
+                    <div className="relative w-64 h-80 overflow-hidden">
+                      <Image
+                        src="/founders/isa-vaz.png"
+                        alt="Isa Vaz"
+                        fill
+                        className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    </div>
+                    <div className="pt-4 pb-2 px-1 text-right">
+                      <p className="text-lg font-normal text-foreground">Isa Vaz</p>
+                      <p className="text-sm text-muted-foreground italic">Founder, CVO & CHIO</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Marvin */}
+                <div className="group relative">
+                  <div className="relative bg-background border border-foreground/10 p-3 transition-transform duration-500 hover:rotate-[3deg] hover:scale-105">
+                    <div className="relative w-64 h-80 overflow-hidden">
+                      <Image
+                        src="/founders/marvin-couto.png"
+                        alt="Marvin Couto"
+                        fill
+                        className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    </div>
+                    <div className="pt-4 pb-2 px-1">
+                      <p className="text-lg font-normal text-foreground">Marvin Couto</p>
+                      <p className="text-sm text-muted-foreground italic">Founder & Chief of Staff</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Integrantes */}
           <section className="flex items-center justify-center py-16 px-6 animate-gentle-fade" style={{ animationDelay: "0.6s", opacity: 0, animationFillMode: "forwards" }}>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-center italic tracking-wide leading-relaxed">
