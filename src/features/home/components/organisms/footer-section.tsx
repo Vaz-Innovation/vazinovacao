@@ -36,7 +36,7 @@ export function FooterSection() {
       </div>
       <div className="mt-12 pt-8 border-t border-foreground/10">
         <p className="text-xs text-muted-foreground">
-          © 2026 Todos os direitos reservados
+          Inteligência Humana Ampliada © 2026
         </p>
       </div>
     </footer>
