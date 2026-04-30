@@ -67,7 +67,10 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
       node: candidate!,
       data: readFragment(BlogPostCardFragment, candidate!),
     }))
-    .filter((candidate) => candidate.data.slug && candidate.data.slug !== postHeaderData.slug)
+    .filter(
+      (candidate) =>
+        candidate.data.slug && candidate.data.slug !== postHeaderData.slug,
+    )
     .slice(0, 3);
 
   const title = postHeaderData.title || "Artigo";
@@ -81,8 +84,8 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
         <meta name="description" content={description} />
       </Head>
 
-      <div className="min-h-screen bg-background text-foreground font-serif">
-        <header className="border-b border-foreground/10">
+      <div className="relative min-h-screen bg-background text-foreground font-serif">
+        <header className="border-b border-foreground/10 sticky top-0 z-[99] bg-background">
           <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-between">
             <Link
               href="/blog"
@@ -105,7 +108,9 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
           {post.content && (
             <div
               className="blog-article-content"
-              dangerouslySetInnerHTML={{ __html: localizeBlogHtml(post.content) }}
+              dangerouslySetInnerHTML={{
+                __html: localizeBlogHtml(post.content),
+              }}
             />
           )}
 
@@ -114,11 +119,16 @@ export default function BlogPostPage({ queryInput }: BlogPostPageProps) {
 
         {relatedPosts.length > 0 && (
           <section className="max-w-7xl mx-auto px-6 pb-16">
-            <h2 className="text-2xl font-normal mb-6">Conteúdos relacionados</h2>
+            <h2 className="text-2xl font-normal mb-6">
+              Conteúdos relacionados
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost, index) => (
                 <BlogPostCard
-                  key={relatedPost.data.id || `${relatedPost.data.slug || "related"}-${index}`}
+                  key={
+                    relatedPost.data.id ||
+                    `${relatedPost.data.slug || "related"}-${index}`
+                  }
                   post={relatedPost.node}
                 />
               ))}
