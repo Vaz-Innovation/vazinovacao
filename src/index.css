@@ -175,6 +175,8 @@
   font-size: 1.125rem;
   line-height: 1.85;
   color: hsl(var(--foreground) / 0.85);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-article-content p {
@@ -213,6 +215,8 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: opacity 0.2s;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-article-content a:hover {
