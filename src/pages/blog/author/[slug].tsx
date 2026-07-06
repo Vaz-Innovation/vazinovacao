@@ -4,7 +4,10 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
-import { BlogPostCard, BlogPostCardFragment } from "@/features/blog/components/blog-post-card";
+import {
+  BlogPostCard,
+  BlogPostCardFragment,
+} from "@/features/blog/components/blog-post-card";
 import { BLOG_PAGE_SIZE } from "@/features/blog/constants";
 import {
   BlogAuthorCard,
@@ -30,7 +33,8 @@ export default function BlogAuthorPage({ queryInput }: BlogAuthorPageProps) {
   );
   const queryData = readFragment(BlogAuthorPageOnQueryFragment, data);
 
-  const authorNode = (queryData?.blogAuthor?.nodes || []).filter(Boolean)[0] || null;
+  const authorNode =
+    (queryData?.blogAuthor?.nodes || []).filter(Boolean)[0] || null;
   const authorData = authorNode
     ? readFragment(BlogAuthorCardAuthorFragment, authorNode)
     : null;
@@ -69,19 +73,23 @@ export default function BlogAuthorPage({ queryInput }: BlogAuthorPageProps) {
         <title>{`${authorData.name || "Autor"} | Vaz Inovação`}</title>
         <meta
           name="description"
-          content={authorData.description || "Perfil de autor e artigos publicados no blog."}
+          content={
+            authorData.description ||
+            "Perfil de autor e artigos publicados no blog."
+          }
         />
       </Head>
 
       <div className="min-h-screen bg-background text-foreground">
-        <header className="border-b border-foreground/10">
-          <div className="max-w-5xl mx-auto px-6 py-8 flex items-center justify-between">
+        <header className="border-b border-border sticky top-0 z-[99] bg-background">
+          <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
             <Link
-              href="/blog"
+              href="/"
               className="text-sm tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
             >
-              ← Blog
+              Vaz Inovação
             </Link>
+            <h1 className="text-lg font-semibold">Blog</h1>
           </div>
         </header>
 
@@ -89,15 +97,22 @@ export default function BlogAuthorPage({ queryInput }: BlogAuthorPageProps) {
           <BlogAuthorCard author={authorNode} />
 
           <section>
-            <h2 className="text-2xl font-semibold mb-6">Artigos de {authorData.name || "autor"}</h2>
+            <h2 className="text-2xl font-semibold mb-6">
+              Artigos de {authorData.name || "autor"}
+            </h2>
 
             {posts.length === 0 ? (
-              <p className="text-muted-foreground">Este autor ainda não publicou artigos visíveis.</p>
+              <p className="text-muted-foreground">
+                Este autor ainda não publicou artigos visíveis.
+              </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.map((post, index) => (
                   <BlogPostCard
-                    key={post.data.id || `${post.data.slug || "author-post"}-${index}`}
+                    key={
+                      post.data.id ||
+                      `${post.data.slug || "author-post"}-${index}`
+                    }
                     post={post.node}
                   />
                 ))}

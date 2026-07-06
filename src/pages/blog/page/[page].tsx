@@ -100,7 +100,9 @@ export default function BlogPaginatedPage({
         new Set(
           posts.flatMap((post) =>
             (post.data.tags?.nodes || [])
-              .map((tag) => (tag ? readFragment(TaxonomyChipFragment, tag).name : null))
+              .map((tag) =>
+                tag ? readFragment(TaxonomyChipFragment, tag).name : null,
+              )
               .filter((tagName): tagName is string => Boolean(tagName)),
           ),
         ),
@@ -111,7 +113,8 @@ export default function BlogPaginatedPage({
   const categories = useMemo(
     () =>
       (queryData?.categories?.nodes || []).filter(
-        (category): category is NonNullable<typeof category> => Boolean(category),
+        (category): category is NonNullable<typeof category> =>
+          Boolean(category),
       ),
     [queryData?.categories?.nodes],
   );
@@ -123,7 +126,8 @@ export default function BlogPaginatedPage({
       const normalizedSearch = searchQuery.trim().toLowerCase();
 
       const matchesSearch = normalizedSearch
-        ? postTitle.includes(normalizedSearch) || postExcerpt.includes(normalizedSearch)
+        ? postTitle.includes(normalizedSearch) ||
+          postExcerpt.includes(normalizedSearch)
         : true;
 
       const matchesTag = selectedTag
@@ -140,7 +144,10 @@ export default function BlogPaginatedPage({
             if (!category) {
               return false;
             }
-            return readFragment(TaxonomyChipFragment, category).slug === selectedCategorySlug;
+            return (
+              readFragment(TaxonomyChipFragment, category).slug ===
+              selectedCategorySlug
+            );
           })
         : true;
 
@@ -160,8 +167,8 @@ export default function BlogPaginatedPage({
         />
       </Head>
 
-      <div className="min-h-screen bg-background text-foreground">
-        <header className="border-b border-border">
+      <div className="relative min-h-screen bg-background text-foreground">
+        <header className="border-b border-border sticky top-0 z-[99] bg-background">
           <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
             <Link
               href="/"
@@ -188,7 +195,9 @@ export default function BlogPaginatedPage({
 
         <main className="max-w-7xl mx-auto px-6 pb-16">
           {isLoading && !data ? (
-            <p className="text-center text-muted-foreground py-24 text-lg">Carregando artigos...</p>
+            <p className="text-center text-muted-foreground py-24 text-lg">
+              Carregando artigos...
+            </p>
           ) : filteredPosts.length === 0 ? (
             <p className="text-center text-muted-foreground py-24 text-lg">
               Nenhum artigo encontrado.
@@ -196,7 +205,9 @@ export default function BlogPaginatedPage({
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post, index) => (
-                <div key={post.data.id || `${post.data.slug || "post"}-${index}`}>
+                <div
+                  key={post.data.id || `${post.data.slug || "post"}-${index}`}
+                >
                   <BlogPostCard post={post.node} />
                   {index === 2 && <NewsletterSubscribeCard compact />}
                 </div>
@@ -205,7 +216,10 @@ export default function BlogPaginatedPage({
             </div>
           )}
 
-          <nav className="mt-12 flex items-center justify-center gap-3" aria-label="Paginacao do blog">
+          <nav
+            className="mt-12 flex items-center justify-center gap-3"
+            aria-label="Paginacao do blog"
+          >
             {page > 1 && (
               <Link
                 href={hrefForBlogPage(page - 1)}
@@ -239,7 +253,8 @@ export const getStaticProps: GetStaticProps<BlogPaginatedPageProps> = async ({
   params,
 }) => {
   const queryClient = new QueryClient();
-  const pageParam = typeof params?.page === "string" ? Number(params.page) : Number.NaN;
+  const pageParam =
+    typeof params?.page === "string" ? Number(params.page) : Number.NaN;
 
   if (!Number.isInteger(pageParam) || pageParam < 1) {
     return {
@@ -270,7 +285,9 @@ export const getStaticProps: GetStaticProps<BlogPaginatedPageProps> = async ({
     );
     const queryData = readFragment(BlogListOnQueryFragment, data);
 
-    const hasPosts = Boolean((queryData?.blogPosts?.nodes || []).filter(Boolean).length);
+    const hasPosts = Boolean(
+      (queryData?.blogPosts?.nodes || []).filter(Boolean).length,
+    );
     if (!hasPosts) {
       return {
         notFound: true,

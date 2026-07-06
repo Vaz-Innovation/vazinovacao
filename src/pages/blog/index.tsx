@@ -45,7 +45,8 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
   const categories = useMemo(
     () =>
       (queryData?.categories?.nodes || []).filter(
-        (category): category is NonNullable<typeof category> => Boolean(category),
+        (category): category is NonNullable<typeof category> =>
+          Boolean(category),
       ),
     [queryData?.categories?.nodes],
   );
@@ -65,7 +66,9 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
         new Set(
           posts.flatMap((post) =>
             (post.data.tags?.nodes || [])
-              .map((tag) => (tag ? readFragment(TaxonomyChipFragment, tag).name : null))
+              .map((tag) =>
+                tag ? readFragment(TaxonomyChipFragment, tag).name : null,
+              )
               .filter((tagName): tagName is string => Boolean(tagName)),
           ),
         ),
@@ -80,7 +83,8 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
       const normalizedSearch = searchQuery.trim().toLowerCase();
 
       const matchesSearch = normalizedSearch
-        ? postTitle.includes(normalizedSearch) || postExcerpt.includes(normalizedSearch)
+        ? postTitle.includes(normalizedSearch) ||
+          postExcerpt.includes(normalizedSearch)
         : true;
 
       const matchesTag = selectedTag
@@ -97,7 +101,10 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
             if (!category) {
               return false;
             }
-            return readFragment(TaxonomyChipFragment, category).slug === selectedCategorySlug;
+            return (
+              readFragment(TaxonomyChipFragment, category).slug ===
+              selectedCategorySlug
+            );
           })
         : true;
 
@@ -115,8 +122,8 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
         />
       </Head>
 
-      <div className="min-h-screen bg-background text-foreground">
-        <header className="border-b border-border">
+      <div className="relative min-h-screen bg-background text-foreground">
+        <header className="border-b border-border sticky top-0 z-[99] bg-background">
           <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
             <Link
               href="/"
@@ -143,7 +150,9 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
 
         <main className="max-w-7xl mx-auto px-6 pb-16">
           {isLoading && !data ? (
-            <p className="text-center text-muted-foreground py-24 text-lg">Carregando artigos...</p>
+            <p className="text-center text-muted-foreground py-24 text-lg">
+              Carregando artigos...
+            </p>
           ) : filteredPosts.length === 0 ? (
             <p className="text-center text-muted-foreground py-24 text-lg">
               Nenhum artigo encontrado.
@@ -151,7 +160,9 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post, index) => (
-                <div key={post.data.id || `${post.data.slug || "post"}-${index}`}>
+                <div
+                  key={post.data.id || `${post.data.slug || "post"}-${index}`}
+                >
                   <BlogPostCard post={post.node} />
                 </div>
               ))}
@@ -164,7 +175,10 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
           )}
 
           {hasNextPage && (
-            <nav className="mt-12 flex items-center justify-center gap-3" aria-label="Paginacao do blog">
+            <nav
+              className="mt-12 flex items-center justify-center gap-3"
+              aria-label="Paginacao do blog"
+            >
               <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-md border border-foreground/30 px-3 text-sm font-medium">
                 1
               </span>
@@ -188,7 +202,9 @@ export default function BlogPage({ queryInput }: BlogPageProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps<BlogPageProps> = async ({ locale }) => {
+export const getStaticProps: GetStaticProps<BlogPageProps> = async ({
+  locale,
+}) => {
   const queryClient = new QueryClient();
 
   const queryInput: VariablesOf<typeof BlogListPageQuery> = {
@@ -197,7 +213,9 @@ export const getStaticProps: GetStaticProps<BlogPageProps> = async ({ locale }) 
   };
 
   try {
-    await queryClient.fetchQuery(gqlQueryOptions(BlogListPageQuery, { input: queryInput }));
+    await queryClient.fetchQuery(
+      gqlQueryOptions(BlogListPageQuery, { input: queryInput }),
+    );
   } catch {
     // Build can proceed even if WordPress is unreachable; page will re-fetch at runtime.
   }
