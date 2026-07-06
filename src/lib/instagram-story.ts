@@ -58,30 +58,38 @@ async function buildStoryImage(imageUrl: string): Promise<Buffer> {
         <style>
           .link-text {
             font-family: 'Georgia', 'Playfair Display', serif;
-            font-size: 50px; 
+            font-size: 50px;
             font-weight: 500;
             fill: #ffffff;
           }
         </style>
         <defs>
           <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#000000" flood-opacity="0.6" />
+            <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#000" flood-opacity="0.6" />
           </filter>
         </defs>
+
+        <!-- background chip -->
         <rect
-          x="0"
-          y="${STORY_HEIGHT - 350 - 65}"
-          width="${STORY_WIDTH}"
-          height="100"
-          fill="#000000"
+          x="50%"
+          y="${STORY_HEIGHT - 350 - 85}"
+          width="420"
+          height="70"
+          rx="18"
+          ry="18"
+          transform="translate(-210, 0)"
+          fill="rgba(0,0,0,0.45)"
         />
+
         <text
           x="50%"
-          y="${STORY_HEIGHT - 350}"
+          y="${STORY_HEIGHT - 345 - 40}"
           text-anchor="middle"
           class="link-text"
           filter="url(#textShadow)"
-        >Link na bio.</text>
+        >
+          Link na bio.
+        </text>
       </svg>
     `;
   const textBuffer = Buffer.from(textSvg);
