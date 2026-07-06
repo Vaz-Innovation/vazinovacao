@@ -8,6 +8,10 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   try {
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return res.status(405).json({ error: "Method not allowed" });
+    }
     if (!WORDPRESS_WEBHOOK_KEY) {
       return res
         .status(500)
