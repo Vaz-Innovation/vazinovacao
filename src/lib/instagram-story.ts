@@ -1,5 +1,8 @@
 import sharp from "sharp";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import os from "node:os";
 
 const AWS_S3_BUCKET = process.env.AWS_S3_BUCKET;
 const AWS_REGION = process.env.AWS_REGION;
@@ -10,6 +13,42 @@ const INSTAGRAM_ACCESS_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
 
 const STORY_WIDTH = 1080;
 const STORY_HEIGHT = 1920;
+
+const STORY_FONT_FAMILY = "Playfair Display";
+const STORY_FONT_WEIGHT = 500;
+// Bundled font, not a system one: sharp rasterizes SVG <text> via
+// librsvg/fontconfig, and serverless runtimes (e.g. Vercel) ship no
+// /etc/fonts/fonts.conf at all, which makes fontconfig fail outright
+// instead of just falling back to a different font.
+const BUNDLED_FONT_DIR = path.join(process.cwd(), "src/lib/fonts");
+const FONTCONFIG_DIR = path.join(os.tmpdir(), "instagram-story-fontconfig");
+const FONTCONFIG_CONF_PATH = path.join(FONTCONFIG_DIR, "fonts.conf");
+
+let fontConfigReady: Promise<void> | null = null;
+
+async function ensureFontConfigured(): Promise<void> {
+  if (!fontConfigReady) {
+    fontConfigReady = (async () => {
+      const cacheDir = path.join(FONTCONFIG_DIR, "cache");
+      await mkdir(cacheDir, { recursive: true });
+
+      await writeFile(
+        FONTCONFIG_CONF_PATH,
+        `<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <dir>${BUNDLED_FONT_DIR}</dir>
+  <cachedir>${cacheDir}</cachedir>
+</fontconfig>
+`,
+      );
+
+      process.env.FONTCONFIG_PATH = FONTCONFIG_DIR;
+    })();
+  }
+
+  return fontConfigReady;
+}
 
 export function isFeatureImageUrl(guid: unknown): guid is string {
   if (typeof guid !== "string") {
@@ -23,6 +62,8 @@ export function isFeatureImageUrl(guid: unknown): guid is string {
 }
 
 async function buildStoryImage(imageUrl: string): Promise<Buffer> {
+  await ensureFontConfigured();
+
   const imageResponse = await fetch(imageUrl);
   if (!imageResponse.ok) {
     throw new Error("Failed to download image.");
@@ -57,9 +98,9 @@ async function buildStoryImage(imageUrl: string): Promise<Buffer> {
       <svg width="${STORY_WIDTH}" height="${STORY_HEIGHT}">
         <style>
           .link-text {
-            font-family: 'Georgia', 'Playfair Display', serif;
+            font-family: '${STORY_FONT_FAMILY}', serif;
             font-size: 50px;
-            font-weight: 500;
+            font-weight: ${STORY_FONT_WEIGHT};
             fill: #ffffff;
           }
         </style>
