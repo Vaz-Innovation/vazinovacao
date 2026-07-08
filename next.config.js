@@ -12,6 +12,9 @@ const { protocol, hostname, port, pathname } = new URL(
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/api/webhook/created-post": ["./src/lib/fonts/**"],
+  },
   images: {
     remotePatterns: [
       {
