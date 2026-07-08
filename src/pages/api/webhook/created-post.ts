@@ -39,11 +39,11 @@ export default async function handler(
     }
     const post = req.body.post;
     console.log("le post ", post);
-    if (post.post_status !== "publish") {
-      return res.status(200).json({
-        error: "Post not published. Ignoring...",
-      });
-    }
+    // if (post.post_status !== "publish") {
+    //   return res.status(200).json({
+    //     error: "Post not published. Ignoring...",
+    //   });
+    // }
 
     if (!isFeatureImageUrl(post.guid)) {
       return res.status(200).json({
