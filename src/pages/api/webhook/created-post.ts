@@ -18,12 +18,15 @@ export default async function handler(
         .json({ error: "WORDPRESS_WEBHOOK_KEY is not set" });
     }
     const webhookKey = req.headers["x-wordpress-webhook-key"];
+    console.log("webhookKey: ", webhookKey);
+
     if (webhookKey !== WORDPRESS_WEBHOOK_KEY) {
       return res.status(401).json({
         error: "Invalid webhook key",
       });
     }
     const webhookName = req.headers["x-wp-webhook-url-name"];
+    console.log("webhookName: ", webhookName);
     if (webhookName !== "created-post") {
       return res.status(401).json({
         error: "Invalid webhook name",
@@ -35,6 +38,7 @@ export default async function handler(
       });
     }
     const post = req.body.post;
+    console.log("le post ", post);
     if (post.post_status !== "publish") {
       return res.status(200).json({
         error: "Post not published. Ignoring...",
@@ -47,10 +51,18 @@ export default async function handler(
       });
     }
 
+    console.log("passou daq");
+
     const result = await publishPostStory(post.guid);
+
+    console.log("le result ", result);
+
+    console.log("chegou aq");
 
     return res.status(200).json(result);
   } catch (error) {
+    console.log("lerro ", error);
+
     return res.status(500).json({ error });
   }
 }
