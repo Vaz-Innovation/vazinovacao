@@ -51,9 +51,15 @@ export default async function handler(
       });
     }
 
-    console.log("passou daq");
+    // console.log("passou daq");
 
-    const result = await publishPostStory(post.guid);
+    // const result = await publishPostStory(post.guid);
+    // const result = await publishPostStory(
+    //   "https://upload.wikimedia.org/wikipedia/commons/e/ec/Ara_ararauna_Luc_Viatour.jpg",
+    //   "Novo Post",
+    // );
+
+    const result = await publishPostStory(post.guid, "Novo Post");
 
     console.log("le result ", result);
 
