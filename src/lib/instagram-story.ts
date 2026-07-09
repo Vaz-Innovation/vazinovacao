@@ -61,174 +61,6 @@ export function isFeatureImageUrl(guid: unknown): guid is string {
   }
 }
 
-// async function buildStoryImage(
-//   imageUrl: string,
-//   postTitle: string,
-// ): Promise<Buffer> {
-//   await ensureFontConfigured();
-
-//   const imageResponse = await fetch(imageUrl);
-//   if (!imageResponse.ok) {
-//     throw new Error("Failed to download image.");
-//   }
-
-//   const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
-
-//   const backgroundBuffer = await sharp(imageBuffer)
-//     .resize(STORY_WIDTH, STORY_HEIGHT, {
-//       fit: "cover",
-//     })
-//     .blur(30)
-//     .jpeg({
-//       quality: 80,
-//     })
-//     .toBuffer();
-
-//   const foregroundBuffer = await sharp(imageBuffer)
-//     .resize(STORY_WIDTH, STORY_HEIGHT, {
-//       fit: "contain",
-//       background: {
-//         r: 0,
-//         g: 0,
-//         b: 0,
-//         alpha: 0,
-//       },
-//     })
-//     .png()
-//     .toBuffer();
-
-//   const maxChars = 70;
-//   const maxCharsPerLine = 25;
-
-//   const truncatedTitle =
-//     postTitle.length > maxChars
-//       ? `${postTitle.slice(0, maxChars - 3).trim()}...`
-//       : postTitle;
-
-//   const words = truncatedTitle.split(" ");
-//   const lines = [];
-//   let currentLine = "";
-
-//   words.forEach((word) => {
-//     if (
-//       (currentLine + word).length > maxCharsPerLine &&
-//       currentLine.trim().length > 0
-//     ) {
-//       lines.push(currentLine.trim());
-//       currentLine = word + " ";
-//     } else {
-//       currentLine += word + " ";
-//     }
-//   });
-//   if (currentLine.trim().length > 0) {
-//     lines.push(currentLine.trim());
-//   }
-
-//   const longestLine = lines.reduce((a, b) => (a.length > b.length ? a : b), "");
-//   const titleBgWidth = Math.max(200, longestLine.length * 32 + 60);
-
-//   const lineHeight = 75;
-//   const titleBgHeight = 100 + (lines.length - 1) * lineHeight;
-
-//   const titleTspans = lines
-//     .map(
-//       (line, index) =>
-//         `<tspan x="50%" dy="${index === 0 ? 0 : lineHeight}">${line}</tspan>`,
-//     )
-//     .join("");
-
-//   const textSvg = `
-//   <svg width="${STORY_WIDTH}" height="${STORY_HEIGHT}">
-//     <style>
-//       .title {
-//         font-family: '${STORY_FONT_FAMILY}', serif;
-//         font-size: 68px;
-//         font-weight: ${STORY_FONT_WEIGHT};
-//         fill: #ffffff;
-//       }
-
-//       .link-text {
-//         font-family: '${STORY_FONT_FAMILY}', serif;
-//         font-size: 50px;
-//         font-weight: ${STORY_FONT_WEIGHT};
-//         fill: #ffffff;
-//       }
-//     </style>
-
-//     <defs>
-//       <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
-//         <feDropShadow
-//           dx="0"
-//           dy="3"
-//           stdDeviation="6"
-//           flood-color="#000"
-//           flood-opacity="0.6"
-//         />
-//       </filter>
-//     </defs>
-
-//     <rect
-//       x="50%"
-//       y="${STORY_HEIGHT - 460 - 75}"
-//       width="${titleBgWidth}"
-//       height="${titleBgHeight}"
-//       rx="18"
-//       ry="18"
-//       transform="translate(-${titleBgWidth / 2}, 0)"
-//       fill="rgba(0,0,0,0.45)"
-//     />
-
-//     <text
-//       x="50%"
-//       y="${STORY_HEIGHT - 460}"
-//       text-anchor="middle"
-//       class="title"
-//       filter="url(#textShadow)"
-//     >
-//       ${titleTspans}
-//     </text>
-
-//     <rect
-//       x="50%"
-//       y="${STORY_HEIGHT - 350 - 85 + (lines.length - 1) * lineHeight}"
-//       width="420"
-//       height="70"
-//       rx="18"
-//       ry="18"
-//       transform="translate(-210, 0)"
-//       fill="rgba(0,0,0,0.45)"
-//     />
-
-//     <text
-//       x="50%"
-//       y="${STORY_HEIGHT - 345 - 40 + (lines.length - 1) * lineHeight}"
-//       text-anchor="middle"
-//       class="link-text"
-//       filter="url(#textShadow)"
-//     >
-//       Link na bio.
-//     </text>
-//   </svg>
-// `;
-//   const textBuffer = Buffer.from(textSvg);
-
-//   return sharp(backgroundBuffer)
-//     .composite([
-//       {
-//         input: foregroundBuffer,
-//         gravity: "center",
-//       },
-//       {
-//         input: textBuffer,
-//         gravity: "center",
-//       },
-//     ])
-//     .jpeg({
-//       quality: 90,
-//     })
-//     .toBuffer();
-// }
-
 // 1. Card dimensions
 const CARD_WIDTH = 920;
 const CARD_HEIGHT = 920;
@@ -460,6 +292,9 @@ async function publishStoryToInstagram(
   const postMediaData = await postMediaResponse.json();
   const creationId = postMediaData.id;
 
+  // sleep for 30 seconds because of instagram's api delay
+  await new Promise((resolve) => setTimeout(resolve, 30_000));
+
   const postMediaPublishResponse = await fetch(
     `https://graph.facebook.com/v25.0/${INSTAGRAM_ACCOUNT_ID}/media_publish?creation_id=${creationId}&access_token=${INSTAGRAM_ACCESS_TOKEN}`,
     {
@@ -468,22 +303,6 @@ async function publishStoryToInstagram(
   );
 
   return postMediaPublishResponse.json();
-
-  // const response = await fetch(imageUrl);
-
-  // if (!response.ok) {
-  //   throw new Error(
-  //     `Erro ao baixar imagem: ${response.status} ${response.statusText}`,
-  //   );
-  // }
-
-  // const arrayBuffer = await response.arrayBuffer();
-  // const buffer = Buffer.from(arrayBuffer);
-  // await writeFile("teste.jpg", buffer);
-
-  // return {
-  //   id: "deu bom",
-  // };
 }
 
 export interface PublishPostStoryResult {
