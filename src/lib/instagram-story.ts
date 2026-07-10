@@ -15,7 +15,6 @@ const STORY_WIDTH = 1080;
 const STORY_HEIGHT = 1920;
 
 const STORY_FONT_FAMILY = "Playfair Display";
-const STORY_FONT_WEIGHT = 500;
 // Bundled font, not a system one: sharp rasterizes SVG <text> via
 // librsvg/fontconfig, and serverless runtimes (e.g. Vercel) ship no
 // /etc/fonts/fonts.conf at all, which makes fontconfig fail outright
@@ -73,7 +72,7 @@ const OFFSET_Y = Math.floor((STORY_HEIGHT - CARD_HEIGHT) / 2);
 const IMAGE_WIDTH = CARD_WIDTH;
 const IMAGE_HEIGHT = Math.floor(CARD_HEIGHT * 0.7);
 
-async function buildStoryImage(
+export async function buildStoryImage(
   imageUrl: string,
   postTitle: string,
 ): Promise<Buffer> {
@@ -251,7 +250,7 @@ async function buildStoryImage(
   return finalBuffer;
 }
 
-async function uploadStoryImage(storyBuffer: Buffer): Promise<string> {
+export async function uploadStoryImage(storyBuffer: Buffer): Promise<string> {
   const s3Client = new S3Client({
     region: AWS_REGION,
     credentials: {
@@ -272,51 +271,4 @@ async function uploadStoryImage(storyBuffer: Buffer): Promise<string> {
   );
 
   return `https://${AWS_S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${s3Key}`;
-}
-
-export interface PublishStoryToInstagramResult {
-  id: string;
-}
-
-async function publishStoryToInstagram(
-  imageUrl: string,
-): Promise<PublishStoryToInstagramResult> {
-  const MEDIA_TYPE = "STORIES";
-
-  const postMediaResponse = await fetch(
-    `https://graph.facebook.com/v25.0/${INSTAGRAM_ACCOUNT_ID}/media?image_url=${imageUrl}&media_type=${MEDIA_TYPE}&access_token=${INSTAGRAM_ACCESS_TOKEN}`,
-    {
-      method: "POST",
-    },
-  );
-  const postMediaData = await postMediaResponse.json();
-  const creationId = postMediaData.id;
-
-  // sleep for 30 seconds because of instagram's api delay
-  await new Promise((resolve) => setTimeout(resolve, 30_000));
-
-  const postMediaPublishResponse = await fetch(
-    `https://graph.facebook.com/v25.0/${INSTAGRAM_ACCOUNT_ID}/media_publish?creation_id=${creationId}&access_token=${INSTAGRAM_ACCESS_TOKEN}`,
-    {
-      method: "POST",
-    },
-  );
-
-  return postMediaPublishResponse.json();
-}
-
-export interface PublishPostStoryResult {
-  data: PublishStoryToInstagramResult;
-  s3ImageUrl: string;
-}
-
-export async function publishPostStory(
-  postImageUrl: string,
-  postTitle: string,
-): Promise<PublishPostStoryResult> {
-  const storyBuffer = await buildStoryImage(postImageUrl, postTitle);
-  const s3ImageUrl = await uploadStoryImage(storyBuffer);
-  const data = await publishStoryToInstagram(s3ImageUrl);
-
-  return { data, s3ImageUrl };
 }
