@@ -62,7 +62,7 @@ export function isFeatureImageUrl(guid: unknown): guid is string {
 
 // 1. Card dimensions
 const CARD_WIDTH = 920;
-const CARD_HEIGHT = 920;
+const CARD_HEIGHT = 1150;
 
 // Offsets to center the card in the 9:16 story
 const OFFSET_X = Math.floor((STORY_WIDTH - CARD_WIDTH) / 2);
@@ -70,7 +70,7 @@ const OFFSET_Y = Math.floor((STORY_HEIGHT - CARD_HEIGHT) / 2);
 
 // 2. Image dimensions
 const IMAGE_WIDTH = CARD_WIDTH;
-const IMAGE_HEIGHT = Math.floor(CARD_HEIGHT * 0.7);
+const IMAGE_HEIGHT = Math.floor(CARD_HEIGHT * 0.6);
 
 export async function buildStoryImage(
   imageUrl: string,
