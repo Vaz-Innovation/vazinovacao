@@ -272,3 +272,34 @@ export async function uploadStoryImage(storyBuffer: Buffer): Promise<string> {
 
   return `https://${AWS_S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${s3Key}`;
 }
+
+export interface PublishStoryToInstagramResult {
+  id: string;
+}
+
+export async function publishStoryToInstagram(
+  imageUrl: string,
+): Promise<PublishStoryToInstagramResult> {
+  const MEDIA_TYPE = "STORIES";
+
+  const postMediaResponse = await fetch(
+    `https://graph.facebook.com/v25.0/${INSTAGRAM_ACCOUNT_ID}/media?image_url=${imageUrl}&media_type=${MEDIA_TYPE}&access_token=${INSTAGRAM_ACCESS_TOKEN}`,
+    {
+      method: "POST",
+    },
+  );
+  const postMediaData = await postMediaResponse.json();
+  const creationId = postMediaData.id;
+
+  // sleep for 30 seconds because of instagram's api delay
+  await new Promise((resolve) => setTimeout(resolve, 30_000));
+
+  const postMediaPublishResponse = await fetch(
+    `https://graph.facebook.com/v25.0/${INSTAGRAM_ACCOUNT_ID}/media_publish?creation_id=${creationId}&access_token=${INSTAGRAM_ACCESS_TOKEN}`,
+    {
+      method: "POST",
+    },
+  );
+
+  return postMediaPublishResponse.json();
+}

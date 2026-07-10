@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { buildStoryImage, uploadStoryImage } from "@/lib/instagram-story";
+import {
+  buildStoryImage,
+  publishStoryToInstagram,
+  uploadStoryImage,
+} from "@/lib/instagram-story";
 
 const WORDPRESS_WEBHOOK_KEY = process.env.WORDPRESS_WEBHOOK_KEY;
 
@@ -37,9 +41,10 @@ export default async function handler(
 
     const storyBuffer = await buildStoryImage(postTitle, mediaUrl);
     const s3ImageUrl = await uploadStoryImage(storyBuffer);
+    const data = await publishStoryToInstagram(s3ImageUrl);
 
     console.log("Generated image on S3: ", s3ImageUrl);
-    return res.status(200).json({ image_url: s3ImageUrl });
+    return res.status(200).json({ image_url: s3ImageUrl, data });
   } catch (error) {
     console.error(error);
 
