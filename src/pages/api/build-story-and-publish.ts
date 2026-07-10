@@ -39,7 +39,7 @@ export default async function handler(
       });
     }
 
-    const storyBuffer = await buildStoryImage(postTitle, mediaUrl);
+    const storyBuffer = await buildStoryImage(mediaUrl, postTitle);
     const s3ImageUrl = await uploadStoryImage(storyBuffer);
     const data = await publishStoryToInstagram(s3ImageUrl);
 
